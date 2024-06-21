@@ -7,8 +7,8 @@ export default defineFakeRoute([
     method: 'post',
     response: ({ body }) => {
       return {
-        error: '',
-        status: 1,
+        msg: '',
+        code: 200,
         data: Mock.mock({
           account: body.account,
           token: `${body.account}_@string`,
@@ -36,8 +36,8 @@ export default defineFakeRoute([
         ]
       }
       return {
-        error: '',
-        status: 1,
+        msg: '',
+        code: 200,
         data: {
           permissions,
         },
@@ -49,8 +49,8 @@ export default defineFakeRoute([
     method: 'post',
     response: () => {
       return {
-        error: '',
-        status: 1,
+        msg: '',
+        code: 200,
         data: {
           isSuccess: true,
         },
