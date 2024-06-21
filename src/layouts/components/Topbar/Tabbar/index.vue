@@ -1,3 +1,33 @@
+<template>
+  <div class="tabbar-container">
+    <div ref="tabsRef" class="tabs" @wheel.prevent="handlerMouserScroll">
+      <TransitionGroup ref="tabContainerRef" name="tabbar" tag="div" class="tab-container">
+        <div
+          v-for="(element, index) in tabbarStore.list" :key="element.tabId"
+          ref="tabRef" :data-index="index" class="tab" :class="{
+            actived: element.tabId === activedTabId,
+          }" :title="typeof element?.title === 'function' ? element.title() : element.title" @click="router.push(element.fullPath)" @contextmenu="onTabbarContextmenu($event, element)"
+        >
+          <div class="tab-dividers" />
+          <div class="tab-background" />
+          <div class="tab-content">
+            <div :key="element.tabId" class="title">
+              <SvgIcon v-if="settingsStore.settings.tabbar.enableIcon && element.icon" :name="element.icon" class="icon" />
+              {{ typeof element?.title === 'function' ? element.title() : element.title }}
+            </div>
+            <div v-if="tabbarStore.list.length > 1" class="action-icon" @click.stop="tabbar.closeById(element.tabId)">
+              <SvgIcon name="i-ri:close-fill" />
+            </div>
+            <div v-show="keys.alt && index < 9" class="hotkey-number">
+              {{ index + 1 }}
+            </div>
+          </div>
+        </div>
+      </TransitionGroup>
+    </div>
+  </div>
+</template>
+
 <script setup lang="ts">
 import ContextMenu from '@imengyu/vue3-context-menu'
 import '@imengyu/vue3-context-menu/lib/vue3-context-menu.css'
@@ -167,36 +197,6 @@ onUnmounted(() => {
   hotkeys.unbind('alt+left,alt+right,alt+w,alt+1,alt+2,alt+3,alt+4,alt+5,alt+6,alt+7,alt+8,alt+9,alt+0')
 })
 </script>
-
-<template>
-  <div class="tabbar-container">
-    <div ref="tabsRef" class="tabs" @wheel.prevent="handlerMouserScroll">
-      <TransitionGroup ref="tabContainerRef" name="tabbar" tag="div" class="tab-container">
-        <div
-          v-for="(element, index) in tabbarStore.list" :key="element.tabId"
-          ref="tabRef" :data-index="index" class="tab" :class="{
-            actived: element.tabId === activedTabId,
-          }" :title="typeof element?.title === 'function' ? element.title() : element.title" @click="router.push(element.fullPath)" @contextmenu="onTabbarContextmenu($event, element)"
-        >
-          <div class="tab-dividers" />
-          <div class="tab-background" />
-          <div class="tab-content">
-            <div :key="element.tabId" class="title">
-              <SvgIcon v-if="settingsStore.settings.tabbar.enableIcon && element.icon" :name="element.icon" class="icon" />
-              {{ typeof element?.title === 'function' ? element.title() : element.title }}
-            </div>
-            <div v-if="tabbarStore.list.length > 1" class="action-icon" @click.stop="tabbar.closeById(element.tabId)">
-              <SvgIcon name="i-ri:close-fill" />
-            </div>
-            <div v-show="keys.alt && index < 9" class="hotkey-number">
-              {{ index + 1 }}
-            </div>
-          </div>
-        </div>
-      </TransitionGroup>
-    </div>
-  </div>
-</template>
 
 <style lang="scss">
 .tabbar-contextmenu {

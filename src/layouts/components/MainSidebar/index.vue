@@ -1,18 +1,3 @@
-<script setup lang="ts">
-import Logo from '../Logo/index.vue'
-import useSettingsStore from '@/store/modules/settings'
-import useMenuStore from '@/store/modules/menu'
-
-defineOptions({
-  name: 'MainSidebar',
-})
-
-const settingsStore = useSettingsStore()
-const menuStore = useMenuStore()
-
-const { switchTo } = useMenu()
-</script>
-
 <template>
   <Transition name="main-sidebar">
     <div v-if="settingsStore.settings.menu.menuMode === 'side' || (settingsStore.mode === 'mobile' && settingsStore.settings.menu.menuMode !== 'single')" class="main-sidebar-container">
@@ -43,6 +28,21 @@ const { switchTo } = useMenu()
     </div>
   </Transition>
 </template>
+
+<script setup lang="ts">
+import Logo from '../Logo/index.vue'
+import useSettingsStore from '@/store/modules/settings'
+import useMenuStore from '@/store/modules/menu'
+
+defineOptions({
+  name: 'MainSidebar',
+})
+
+const settingsStore = useSettingsStore()
+const menuStore = useMenuStore()
+
+const { switchTo } = useMenu()
+</script>
 
 <style lang="scss" scoped>
 .main-sidebar-container {

@@ -1,79 +1,3 @@
-<script setup lang="ts">
-import { useClipboard } from '@vueuse/core'
-import Message from 'vue-m-message'
-import settingsDefault from '@/settings.default'
-import eventBus from '@/utils/eventBus'
-import useSettingsStore from '@/store/modules/settings'
-import useMenuStore from '@/store/modules/menu'
-
-defineOptions({
-  name: 'AppSetting',
-})
-
-const route = useRoute()
-
-const settingsStore = useSettingsStore()
-const menuStore = useMenuStore()
-
-const isShow = ref(false)
-
-watch(() => settingsStore.settings.menu.menuMode, (value) => {
-  if (value === 'single') {
-    menuStore.setActived(0)
-  }
-  else {
-    menuStore.setActived(route.fullPath)
-  }
-})
-
-onMounted(() => {
-  eventBus.on('global-app-setting-toggle', () => {
-    isShow.value = !isShow.value
-  })
-})
-
-const { copy, copied, isSupported } = useClipboard()
-
-watch(copied, (val) => {
-  if (val) {
-    Message.success('复制成功，请粘贴到 src/settings.ts 文件中！', {
-      zIndex: 2000,
-    })
-  }
-})
-
-function isObject(value: any) {
-  return typeof value === 'object' && !Array.isArray(value)
-}
-// 比较两个对象，并提取出不同的部分
-function getObjectDiff(originalObj: Record<string, any>, diffObj: Record<string, any>) {
-  if (!isObject(originalObj) || !isObject(diffObj)) {
-    return diffObj
-  }
-  const diff: Record<string, any> = {}
-  for (const key in diffObj) {
-    const originalValue = originalObj[key]
-    const diffValue = diffObj[key]
-    if (JSON.stringify(originalValue) !== JSON.stringify(diffValue)) {
-      if (isObject(originalValue) && isObject(diffValue)) {
-        const nestedDiff = getObjectDiff(originalValue, diffValue)
-        if (Object.keys(nestedDiff).length > 0) {
-          diff[key] = nestedDiff
-        }
-      }
-      else {
-        diff[key] = diffValue
-      }
-    }
-  }
-  return diff
-}
-
-function handleCopy() {
-  copy(JSON.stringify(getObjectDiff(settingsDefault, settingsStore.settings), null, 2))
-}
-</script>
-
 <template>
   <HSlideover v-model="isShow" title="应用配置">
     <div class="rounded-2 bg-rose/20 px-4 py-2 text-sm/6 c-rose">
@@ -344,6 +268,82 @@ function handleCopy() {
     </template>
   </HSlideover>
 </template>
+
+<script setup lang="ts">
+import { useClipboard } from '@vueuse/core'
+import Message from 'vue-m-message'
+import settingsDefault from '@/settings.default'
+import eventBus from '@/utils/eventBus'
+import useSettingsStore from '@/store/modules/settings'
+import useMenuStore from '@/store/modules/menu'
+
+defineOptions({
+  name: 'AppSetting',
+})
+
+const route = useRoute()
+
+const settingsStore = useSettingsStore()
+const menuStore = useMenuStore()
+
+const isShow = ref(false)
+
+watch(() => settingsStore.settings.menu.menuMode, (value) => {
+  if (value === 'single') {
+    menuStore.setActived(0)
+  }
+  else {
+    menuStore.setActived(route.fullPath)
+  }
+})
+
+onMounted(() => {
+  eventBus.on('global-app-setting-toggle', () => {
+    isShow.value = !isShow.value
+  })
+})
+
+const { copy, copied, isSupported } = useClipboard()
+
+watch(copied, (val) => {
+  if (val) {
+    Message.success('复制成功，请粘贴到 src/settings.ts 文件中！', {
+      zIndex: 2000,
+    })
+  }
+})
+
+function isObject(value: any) {
+  return typeof value === 'object' && !Array.isArray(value)
+}
+// 比较两个对象，并提取出不同的部分
+function getObjectDiff(originalObj: Record<string, any>, diffObj: Record<string, any>) {
+  if (!isObject(originalObj) || !isObject(diffObj)) {
+    return diffObj
+  }
+  const diff: Record<string, any> = {}
+  for (const key in diffObj) {
+    const originalValue = originalObj[key]
+    const diffValue = diffObj[key]
+    if (JSON.stringify(originalValue) !== JSON.stringify(diffValue)) {
+      if (isObject(originalValue) && isObject(diffValue)) {
+        const nestedDiff = getObjectDiff(originalValue, diffValue)
+        if (Object.keys(nestedDiff).length > 0) {
+          diff[key] = nestedDiff
+        }
+      }
+      else {
+        diff[key] = diffValue
+      }
+    }
+  }
+  return diff
+}
+
+function handleCopy() {
+  copy(JSON.stringify(getObjectDiff(settingsDefault, settingsStore.settings), null, 2))
+}
+</script>
 
 <style lang="scss" scoped>
 .divider {

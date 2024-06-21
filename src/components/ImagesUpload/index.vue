@@ -1,3 +1,54 @@
+<template>
+  <div class="upload-container">
+    <div v-for="(item, index) in (url as string[])" :key="index" class="images">
+      <ElImage v-if="index < max" :src="item" :style="`width:${width}px;height:${height}px;`" fit="cover" />
+      <div class="mask">
+        <div class="actions">
+          <span title="预览" @click="preview(index)">
+            <SvgIcon name="i-ep:zoom-in" class="icon" />
+          </span>
+          <span title="移除" @click="remove(index)">
+            <SvgIcon name="i-ep:delete" class="icon" />
+          </span>
+          <span v-show="url.length > 1" title="左移" :class="{ disabled: index === 0 }" @click="move(index, 'left')">
+            <SvgIcon name="i-ep:back" class="icon" />
+          </span>
+          <span v-show="url.length > 1" title="右移" :class="{ disabled: index === url.length - 1 }" @click="move(index, 'right')">
+            <SvgIcon name="i-ep:right" class="icon" />
+          </span>
+        </div>
+      </div>
+    </div>
+    <ElUpload
+      v-show="url.length < max"
+      :show-file-list="false"
+      :headers="headers"
+      :action="action"
+      :data="data"
+      :name="name"
+      :before-upload="beforeUpload"
+      :on-progress="onProgress"
+      :on-success="onSuccess"
+      drag
+      class="images-upload"
+    >
+      <div class="image-slot" :style="`width:${width}px;height:${height}px;`">
+        <SvgIcon name="i-ep:plus" class="icon" />
+      </div>
+      <div v-show="uploadData.progress.percent" class="progress" :style="`width:${width}px;height:${height}px;`">
+        <ElImage :src="uploadData.progress.preview" :style="`width:${width}px;height:${height}px;`" fit="fill" />
+        <ElProgress type="circle" :width="Math.min(width, height) * 0.8" :percentage="uploadData.progress.percent" />
+      </div>
+    </ElUpload>
+    <div v-if="!notip" class="el-upload__tip">
+      <div style="display: inline-block;">
+        <ElAlert :title="`上传图片支持 ${ext.join(' / ')} 格式，单张图片大小不超过 ${size}MB，建议图片尺寸为 ${width}*${height}，且图片数量不超过 ${max} 张`" type="info" show-icon :closable="false" />
+      </div>
+    </div>
+    <ElImageViewer v-if="uploadData.imageViewerVisible" :url-list="url as string[]" :initial-index="uploadData.dialogImageIndex" teleported @close="previewClose" />
+  </div>
+</template>
+
 <script setup lang="ts">
 import type { UploadProps } from 'element-plus'
 import { ElMessage } from 'element-plus'
@@ -99,57 +150,6 @@ const onSuccess: UploadProps['onSuccess'] = (res) => {
   emits('onSuccess', res)
 }
 </script>
-
-<template>
-  <div class="upload-container">
-    <div v-for="(item, index) in (url as string[])" :key="index" class="images">
-      <ElImage v-if="index < max" :src="item" :style="`width:${width}px;height:${height}px;`" fit="cover" />
-      <div class="mask">
-        <div class="actions">
-          <span title="预览" @click="preview(index)">
-            <SvgIcon name="i-ep:zoom-in" class="icon" />
-          </span>
-          <span title="移除" @click="remove(index)">
-            <SvgIcon name="i-ep:delete" class="icon" />
-          </span>
-          <span v-show="url.length > 1" title="左移" :class="{ disabled: index === 0 }" @click="move(index, 'left')">
-            <SvgIcon name="i-ep:back" class="icon" />
-          </span>
-          <span v-show="url.length > 1" title="右移" :class="{ disabled: index === url.length - 1 }" @click="move(index, 'right')">
-            <SvgIcon name="i-ep:right" class="icon" />
-          </span>
-        </div>
-      </div>
-    </div>
-    <ElUpload
-      v-show="url.length < max"
-      :show-file-list="false"
-      :headers="headers"
-      :action="action"
-      :data="data"
-      :name="name"
-      :before-upload="beforeUpload"
-      :on-progress="onProgress"
-      :on-success="onSuccess"
-      drag
-      class="images-upload"
-    >
-      <div class="image-slot" :style="`width:${width}px;height:${height}px;`">
-        <SvgIcon name="i-ep:plus" class="icon" />
-      </div>
-      <div v-show="uploadData.progress.percent" class="progress" :style="`width:${width}px;height:${height}px;`">
-        <ElImage :src="uploadData.progress.preview" :style="`width:${width}px;height:${height}px;`" fit="fill" />
-        <ElProgress type="circle" :width="Math.min(width, height) * 0.8" :percentage="uploadData.progress.percent" />
-      </div>
-    </ElUpload>
-    <div v-if="!notip" class="el-upload__tip">
-      <div style="display: inline-block;">
-        <ElAlert :title="`上传图片支持 ${ext.join(' / ')} 格式，单张图片大小不超过 ${size}MB，建议图片尺寸为 ${width}*${height}，且图片数量不超过 ${max} 张`" type="info" show-icon :closable="false" />
-      </div>
-    </div>
-    <ElImageViewer v-if="uploadData.imageViewerVisible" :url-list="url as string[]" :initial-index="uploadData.dialogImageIndex" teleported @close="previewClose" />
-  </div>
-</template>
 
 <style lang="scss" scoped>
 .upload-container {

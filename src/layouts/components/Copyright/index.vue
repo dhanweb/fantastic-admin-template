@@ -1,13 +1,3 @@
-<script setup lang="ts">
-import useSettingsStore from '@/store/modules/settings'
-
-defineOptions({
-  name: 'Copyright',
-})
-
-const settingsStore = useSettingsStore()
-</script>
-
 <template>
   <footer v-if="settingsStore.settings.copyright.enable" class="copyright">
     <span>Copyright</span>
@@ -20,6 +10,16 @@ const settingsStore = useSettingsStore()
     <a v-if="settingsStore.settings.copyright.beian" href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">{{ settingsStore.settings.copyright.beian }}</a>
   </footer>
 </template>
+
+<script setup lang="ts">
+import useSettingsStore from '@/store/modules/settings'
+
+defineOptions({
+  name: 'Copyright',
+})
+
+const settingsStore = useSettingsStore()
+</script>
 
 <style lang="scss" scoped>
 .copyright {

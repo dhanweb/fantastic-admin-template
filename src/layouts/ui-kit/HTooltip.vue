@@ -1,16 +1,3 @@
-<script setup lang="ts">
-withDefaults(
-  defineProps<{
-    text: string
-    enable?: boolean
-  }>(),
-  {
-    text: '',
-    enable: true,
-  },
-)
-</script>
-
 <template>
   <VTooltip v-if="enable" :popper-triggers="['hover']" v-bind="$attrs">
     <slot />
@@ -24,3 +11,16 @@ withDefaults(
     <slot />
   </div>
 </template>
+
+<script setup lang="ts">
+withDefaults(
+  defineProps<{
+    text: string
+    enable?: boolean
+  }>(),
+  {
+    text: '',
+    enable: true,
+  },
+)
+</script>

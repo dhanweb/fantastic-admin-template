@@ -1,14 +1,3 @@
-<script setup lang="ts">
-import eventBus from '@/utils/eventBus'
-import useSettingsStore from '@/store/modules/settings'
-
-defineOptions({
-  name: 'ToolbarRightSide',
-})
-
-const settingsStore = useSettingsStore()
-</script>
-
 <template>
   <span class="flex-center cursor-pointer px-2 py-1" @click="eventBus.emit('global-search-toggle')">
     <SvgIcon v-if="settingsStore.mode === 'mobile'" name="i-ri:search-line" />
@@ -19,3 +8,14 @@ const settingsStore = useSettingsStore()
     </span>
   </span>
 </template>
+
+<script setup lang="ts">
+import eventBus from '@/utils/eventBus'
+import useSettingsStore from '@/store/modules/settings'
+
+defineOptions({
+  name: 'ToolbarRightSide',
+})
+
+const settingsStore = useSettingsStore()
+</script>

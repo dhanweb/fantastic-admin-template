@@ -1,17 +1,3 @@
-<script setup lang="ts">
-import eventBus from '@/utils/eventBus'
-
-const isShow = ref(false)
-
-const { pkg, lastBuildTime } = __SYSTEM_INFO__
-
-onMounted(() => {
-  eventBus.on('global-system-info-toggle', () => {
-    isShow.value = !isShow.value
-  })
-})
-</script>
-
 <template>
   <HSlideover v-model="isShow" title="系统信息">
     <div class="px-4">
@@ -54,3 +40,17 @@ onMounted(() => {
     </div>
   </HSlideover>
 </template>
+
+<script setup lang="ts">
+import eventBus from '@/utils/eventBus'
+
+const isShow = ref(false)
+
+const { pkg, lastBuildTime } = __SYSTEM_INFO__
+
+onMounted(() => {
+  eventBus.on('global-system-info-toggle', () => {
+    isShow.value = !isShow.value
+  })
+})
+</script>

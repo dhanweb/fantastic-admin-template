@@ -5,154 +5,6 @@ meta:
   layout: false
 </route>
 
-<script setup lang="ts">
-import type { FormInstance, FormRules } from 'element-plus'
-import { ElMessage } from 'element-plus'
-import Copyright from '@/layouts/components/Copyright/index.vue'
-import useSettingsStore from '@/store/modules/settings'
-import useUserStore from '@/store/modules/user'
-
-defineOptions({
-  name: 'Login',
-})
-
-const route = useRoute()
-const router = useRouter()
-
-const settingsStore = useSettingsStore()
-const userStore = useUserStore()
-
-const banner = new URL('../assets/images/login-banner.png', import.meta.url).href
-const logo = new URL('../assets/images/logo.png', import.meta.url).href
-const title = import.meta.env.VITE_APP_TITLE
-
-// 登录方式，default 账号密码登录，qrcode 扫码登录
-const loginType = ref('default')
-
-// 表单类型，login 登录，register 注册，reset 重置密码
-const formType = ref('login')
-const loading = ref(false)
-const redirect = ref(route.query.redirect?.toString() ?? settingsStore.settings.home.fullPath)
-
-// 登录
-const loginFormRef = ref<FormInstance>()
-const loginForm = ref({
-  account: localStorage.login_account || '',
-  password: '',
-  remember: !!localStorage.login_account,
-})
-const loginRules = ref<FormRules>({
-  account: [
-    { required: true, trigger: 'blur', message: '请输入用户名' },
-  ],
-  password: [
-    { required: true, trigger: 'blur', message: '请输入密码' },
-    { min: 6, max: 18, trigger: 'blur', message: '密码长度为6到18位' },
-  ],
-})
-function handleLogin() {
-  loginFormRef.value && loginFormRef.value.validate((valid) => {
-    if (valid) {
-      loading.value = true
-      userStore.login(loginForm.value).then(() => {
-        loading.value = false
-        if (loginForm.value.remember) {
-          localStorage.setItem('login_account', loginForm.value.account)
-        }
-        else {
-          localStorage.removeItem('login_account')
-        }
-        router.push(redirect.value)
-      }).catch(() => {
-        loading.value = false
-      })
-    }
-  })
-}
-
-// 注册
-const registerFormRef = ref<FormInstance>()
-const registerForm = ref({
-  account: '',
-  captcha: '',
-  password: '',
-  checkPassword: '',
-})
-const registerRules = ref<FormRules>({
-  account: [
-    { required: true, trigger: 'blur', message: '请输入用户名' },
-  ],
-  captcha: [
-    { required: true, trigger: 'blur', message: '请输入验证码' },
-  ],
-  password: [
-    { required: true, trigger: 'blur', message: '请输入密码' },
-    { min: 6, max: 18, trigger: 'blur', message: '密码长度为6到18位' },
-  ],
-  checkPassword: [
-    { required: true, trigger: 'blur', message: '请再次输入密码' },
-    {
-      validator: (rule, value, callback) => {
-        if (value !== registerForm.value.password) {
-          callback(new Error('两次输入的密码不一致'))
-        }
-        else {
-          callback()
-        }
-      },
-    },
-  ],
-})
-function handleRegister() {
-  ElMessage({
-    message: '注册模块仅提供界面演示，无实际功能，需开发者自行扩展',
-    type: 'warning',
-  })
-  registerFormRef.value && registerFormRef.value.validate((valid) => {
-    if (valid) {
-      // 这里编写业务代码
-    }
-  })
-}
-
-// 重置密码
-const resetFormRef = ref<FormInstance>()
-const resetForm = ref({
-  account: localStorage.login_account,
-  captcha: '',
-  newPassword: '',
-})
-const resetRules = ref<FormRules>({
-  account: [
-    { required: true, trigger: 'blur', message: '请输入用户名' },
-  ],
-  captcha: [
-    { required: true, trigger: 'blur', message: '请输入验证码' },
-  ],
-  newPassword: [
-    { required: true, trigger: 'blur', message: '请输入新密码' },
-    { min: 6, max: 18, trigger: 'blur', message: '密码长度为6到18位' },
-  ],
-})
-function handleReset() {
-  ElMessage({
-    message: '重置密码仅提供界面演示，无实际功能，需开发者自行扩展',
-    type: 'info',
-  })
-  resetFormRef.value && resetFormRef.value.validate((valid) => {
-    if (valid) {
-      // 这里编写业务代码
-    }
-  })
-}
-
-function testAccount(account: string) {
-  loginForm.value.account = account
-  loginForm.value.password = '123456'
-  handleLogin()
-}
-</script>
-
 <template>
   <div>
     <div class="bg-banner" />
@@ -322,6 +174,154 @@ function testAccount(account: string) {
     <Copyright />
   </div>
 </template>
+
+<script setup lang="ts">
+import type { FormInstance, FormRules } from 'element-plus'
+import { ElMessage } from 'element-plus'
+import Copyright from '@/layouts/components/Copyright/index.vue'
+import useSettingsStore from '@/store/modules/settings'
+import useUserStore from '@/store/modules/user'
+
+defineOptions({
+  name: 'Login',
+})
+
+const route = useRoute()
+const router = useRouter()
+
+const settingsStore = useSettingsStore()
+const userStore = useUserStore()
+
+const banner = new URL('../assets/images/login-banner.png', import.meta.url).href
+const logo = new URL('../assets/images/logo.png', import.meta.url).href
+const title = import.meta.env.VITE_APP_TITLE
+
+// 登录方式，default 账号密码登录，qrcode 扫码登录
+const loginType = ref('default')
+
+// 表单类型，login 登录，register 注册，reset 重置密码
+const formType = ref('login')
+const loading = ref(false)
+const redirect = ref(route.query.redirect?.toString() ?? settingsStore.settings.home.fullPath)
+
+// 登录
+const loginFormRef = ref<FormInstance>()
+const loginForm = ref({
+  account: localStorage.login_account || '',
+  password: '',
+  remember: !!localStorage.login_account,
+})
+const loginRules = ref<FormRules>({
+  account: [
+    { required: true, trigger: 'blur', message: '请输入用户名' },
+  ],
+  password: [
+    { required: true, trigger: 'blur', message: '请输入密码' },
+    { min: 6, max: 18, trigger: 'blur', message: '密码长度为6到18位' },
+  ],
+})
+function handleLogin() {
+  loginFormRef.value && loginFormRef.value.validate((valid) => {
+    if (valid) {
+      loading.value = true
+      userStore.login(loginForm.value).then(() => {
+        loading.value = false
+        if (loginForm.value.remember) {
+          localStorage.setItem('login_account', loginForm.value.account)
+        }
+        else {
+          localStorage.removeItem('login_account')
+        }
+        router.push(redirect.value)
+      }).catch(() => {
+        loading.value = false
+      })
+    }
+  })
+}
+
+// 注册
+const registerFormRef = ref<FormInstance>()
+const registerForm = ref({
+  account: '',
+  captcha: '',
+  password: '',
+  checkPassword: '',
+})
+const registerRules = ref<FormRules>({
+  account: [
+    { required: true, trigger: 'blur', message: '请输入用户名' },
+  ],
+  captcha: [
+    { required: true, trigger: 'blur', message: '请输入验证码' },
+  ],
+  password: [
+    { required: true, trigger: 'blur', message: '请输入密码' },
+    { min: 6, max: 18, trigger: 'blur', message: '密码长度为6到18位' },
+  ],
+  checkPassword: [
+    { required: true, trigger: 'blur', message: '请再次输入密码' },
+    {
+      validator: (rule, value, callback) => {
+        if (value !== registerForm.value.password) {
+          callback(new Error('两次输入的密码不一致'))
+        }
+        else {
+          callback()
+        }
+      },
+    },
+  ],
+})
+function handleRegister() {
+  ElMessage({
+    message: '注册模块仅提供界面演示，无实际功能，需开发者自行扩展',
+    type: 'warning',
+  })
+  registerFormRef.value && registerFormRef.value.validate((valid) => {
+    if (valid) {
+      // 这里编写业务代码
+    }
+  })
+}
+
+// 重置密码
+const resetFormRef = ref<FormInstance>()
+const resetForm = ref({
+  account: localStorage.login_account,
+  captcha: '',
+  newPassword: '',
+})
+const resetRules = ref<FormRules>({
+  account: [
+    { required: true, trigger: 'blur', message: '请输入用户名' },
+  ],
+  captcha: [
+    { required: true, trigger: 'blur', message: '请输入验证码' },
+  ],
+  newPassword: [
+    { required: true, trigger: 'blur', message: '请输入新密码' },
+    { min: 6, max: 18, trigger: 'blur', message: '密码长度为6到18位' },
+  ],
+})
+function handleReset() {
+  ElMessage({
+    message: '重置密码仅提供界面演示，无实际功能，需开发者自行扩展',
+    type: 'info',
+  })
+  resetFormRef.value && resetFormRef.value.validate((valid) => {
+    if (valid) {
+      // 这里编写业务代码
+    }
+  })
+}
+
+function testAccount(account: string) {
+  loginForm.value.account = account
+  loginForm.value.password = '123456'
+  handleLogin()
+}
+</script>
 
 <style lang="scss" scoped>
 [data-mode="mobile"] {

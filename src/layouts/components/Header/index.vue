@@ -1,30 +1,3 @@
-<script setup lang="ts">
-import Logo from '../Logo/index.vue'
-import ToolbarRightSide from '../Topbar/Toolbar/rightSide.vue'
-import useMenuStore from '@/store/modules/menu'
-import useSettingsStore from '@/store/modules/settings'
-
-defineOptions({
-  name: 'LayoutHeader',
-})
-
-const settingsStore = useSettingsStore()
-const menuStore = useMenuStore()
-
-const { switchTo } = useMenu()
-
-const menuRef = ref()
-
-// 顶部模式鼠标滚动
-function handlerMouserScroll(event: WheelEvent) {
-  if (event.deltaY || event.detail !== 0) {
-    menuRef.value.scrollBy({
-      left: (event.deltaY || event.detail) > 0 ? 50 : -50,
-    })
-  }
-}
-</script>
-
 <template>
   <Transition name="header">
     <header v-if="settingsStore.mode === 'pc' && settingsStore.settings.menu.menuMode === 'head'">
@@ -60,6 +33,33 @@ function handlerMouserScroll(event: WheelEvent) {
     </header>
   </Transition>
 </template>
+
+<script setup lang="ts">
+import Logo from '../Logo/index.vue'
+import ToolbarRightSide from '../Topbar/Toolbar/rightSide.vue'
+import useMenuStore from '@/store/modules/menu'
+import useSettingsStore from '@/store/modules/settings'
+
+defineOptions({
+  name: 'LayoutHeader',
+})
+
+const settingsStore = useSettingsStore()
+const menuStore = useMenuStore()
+
+const { switchTo } = useMenu()
+
+const menuRef = ref()
+
+// 顶部模式鼠标滚动
+function handlerMouserScroll(event: WheelEvent) {
+  if (event.deltaY || event.detail !== 0) {
+    menuRef.value.scrollBy({
+      left: (event.deltaY || event.detail) > 0 ? 50 : -50,
+    })
+  }
+}
+</script>
 
 <style lang="scss" scoped>
 header {

@@ -1,3 +1,11 @@
+<template>
+  <div
+    class="fixed-action-bar bottom-0 z-4 bg-[var(--g-container-bg)] p-5 text-center transition" :class="{ shadow: !isBottom }" data-fixed-calc-width
+  >
+    <slot />
+  </div>
+</template>
+
 <script setup lang="ts">
 defineOptions({
   name: 'FixedActionBar',
@@ -25,14 +33,6 @@ function onScroll() {
   isBottom.value = Math.ceil(scrollTop + windowHeight) >= scrollHeight
 }
 </script>
-
-<template>
-  <div
-    class="fixed-action-bar bottom-0 z-4 bg-[var(--g-container-bg)] p-5 text-center transition" :class="{ shadow: !isBottom }" data-fixed-calc-width
-  >
-    <slot />
-  </div>
-</template>
 
 <style lang="scss" scoped>
 .fixed-action-bar {

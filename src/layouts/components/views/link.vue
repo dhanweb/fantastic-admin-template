@@ -1,25 +1,3 @@
-<script setup lang="ts">
-import { useClipboard } from '@vueuse/core'
-import Message from 'vue-m-message'
-
-defineOptions({
-  name: 'LinkView',
-})
-
-const route = useRoute()
-
-const { copy, copied } = useClipboard()
-watch(copied, (val) => {
-  val && Message.success('复制成功', {
-    zIndex: 2000,
-  })
-})
-
-function open() {
-  window.open(route.meta.link, '_blank')
-}
-</script>
-
 <template>
   <div class="absolute h-full w-full flex flex-col">
     <Transition name="slide-right" mode="out-in" appear>
@@ -45,6 +23,28 @@ function open() {
     </Transition>
   </div>
 </template>
+
+<script setup lang="ts">
+import { useClipboard } from '@vueuse/core'
+import Message from 'vue-m-message'
+
+defineOptions({
+  name: 'LinkView',
+})
+
+const route = useRoute()
+
+const { copy, copied } = useClipboard()
+watch(copied, (val) => {
+  val && Message.success('复制成功', {
+    zIndex: 2000,
+  })
+})
+
+function open() {
+  window.open(route.meta.link, '_blank')
+}
+</script>
 
 <style lang="scss" scoped>
 .slide-right-enter-active {

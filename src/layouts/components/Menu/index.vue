@@ -1,3 +1,21 @@
+<template>
+  <div
+    class="flex flex-col of-hidden transition-all" :class="{
+      'w-[200px]': !isMenuPopup && props.mode === 'vertical',
+      'w-[64px]': isMenuPopup && props.mode === 'vertical',
+      'h-[80px]': props.mode === 'horizontal',
+      'flex-row! w-auto': isMenuPopup && props.mode === 'horizontal',
+    }"
+  >
+    <template v-for="item in menu" :key="item.path ?? JSON.stringify(item)">
+      <template v-if="item.meta?.menu !== false">
+        <SubMenu v-if="item.children?.length" :menu="item" :unique-key="[item.path ?? JSON.stringify(item)]" />
+        <Item v-else :item="item" :unique-key="[item.path ?? JSON.stringify(item)]" @click="handleMenuItemClick(item.path ?? JSON.stringify(item))" />
+      </template>
+    </template>
+  </div>
+</template>
+
 <script setup lang="ts">
 import SubMenu from './sub.vue'
 import Item from './item.vue'
@@ -159,21 +177,3 @@ provide(rootMenuInjectionKey, reactive({
   handleSubMenuClick,
 }))
 </script>
-
-<template>
-  <div
-    class="flex flex-col of-hidden transition-all" :class="{
-      'w-[200px]': !isMenuPopup && props.mode === 'vertical',
-      'w-[64px]': isMenuPopup && props.mode === 'vertical',
-      'h-[80px]': props.mode === 'horizontal',
-      'flex-row! w-auto': isMenuPopup && props.mode === 'horizontal',
-    }"
-  >
-    <template v-for="item in menu" :key="item.path ?? JSON.stringify(item)">
-      <template v-if="item.meta?.menu !== false">
-        <SubMenu v-if="item.children?.length" :menu="item" :unique-key="[item.path ?? JSON.stringify(item)]" />
-        <Item v-else :item="item" :unique-key="[item.path ?? JSON.stringify(item)]" @click="handleMenuItemClick(item.path ?? JSON.stringify(item))" />
-      </template>
-    </template>
-  </div>
-</template>

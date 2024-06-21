@@ -1,22 +1,3 @@
-<script setup lang="ts">
-import eventBus from '@/utils/eventBus'
-import useSettingsStore from '@/store/modules/settings'
-
-defineOptions({
-  name: 'HotkeysIntro',
-})
-
-const isShow = ref(false)
-
-const settingsStore = useSettingsStore()
-
-onMounted(() => {
-  eventBus.on('global-hotkeys-intro-toggle', () => {
-    isShow.value = !isShow.value
-  })
-})
-</script>
-
 <template>
   <HDialog v-model="isShow" title="快捷键介绍">
     <div class="px-4">
@@ -86,3 +67,22 @@ onMounted(() => {
     </div>
   </HDialog>
 </template>
+
+<script setup lang="ts">
+import eventBus from '@/utils/eventBus'
+import useSettingsStore from '@/store/modules/settings'
+
+defineOptions({
+  name: 'HotkeysIntro',
+})
+
+const isShow = ref(false)
+
+const settingsStore = useSettingsStore()
+
+onMounted(() => {
+  eventBus.on('global-hotkeys-intro-toggle', () => {
+    isShow.value = !isShow.value
+  })
+})
+</script>

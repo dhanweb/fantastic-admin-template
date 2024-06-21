@@ -1,3 +1,9 @@
+<template>
+  <span class="flex-center cursor-pointer px-2 py-1" @click="mainPage.reload()">
+    <SvgIcon name="i-iconoir:refresh-double" />
+  </span>
+</template>
+
 <script setup lang="ts">
 defineOptions({
   name: 'PageReload',
@@ -5,9 +11,3 @@ defineOptions({
 
 const mainPage = useMainPage()
 </script>
-
-<template>
-  <span class="flex-center cursor-pointer px-2 py-1" @click="mainPage.reload()">
-    <SvgIcon name="i-iconoir:refresh-double" />
-  </span>
-</template>

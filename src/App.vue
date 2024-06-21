@@ -1,3 +1,19 @@
+<template>
+  <Provider>
+    <RouterView
+      v-slot="{ Component }"
+      :style="{
+        '--g-main-sidebar-actual-width': mainSidebarActualWidth,
+        '--g-sub-sidebar-actual-width': subSidebarActualWidth,
+      }"
+    >
+      <component :is="Component" v-if="isAuth" />
+      <NotAllowed v-else />
+    </RouterView>
+    <SystemInfo />
+  </Provider>
+</template>
+
 <script setup lang="ts">
 import eruda from 'eruda'
 import VConsole from 'vconsole'
@@ -65,19 +81,3 @@ onMounted(() => {
 import.meta.env.VITE_APP_DEBUG_TOOL === 'eruda' && eruda.init()
 import.meta.env.VITE_APP_DEBUG_TOOL === 'vconsole' && new VConsole()
 </script>
-
-<template>
-  <Provider>
-    <RouterView
-      v-slot="{ Component }"
-      :style="{
-        '--g-main-sidebar-actual-width': mainSidebarActualWidth,
-        '--g-sub-sidebar-actual-width': subSidebarActualWidth,
-      }"
-    >
-      <component :is="Component" v-if="isAuth" />
-      <NotAllowed v-else />
-    </RouterView>
-    <SystemInfo />
-  </Provider>
-</template>

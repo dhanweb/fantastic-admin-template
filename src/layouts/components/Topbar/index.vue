@@ -1,3 +1,18 @@
+<template>
+  <div
+    class="topbar-container" :class="{
+      'has-tabbar': settingsStore.settings.tabbar.enable,
+      'has-toolbar': enableToolbar,
+      [`topbar-${settingsStore.settings.topbar.mode}`]: true,
+      'shadow': scrollTop,
+      'hide': scrollOnHide,
+    }" data-fixed-calc-width
+  >
+    <Tabbar v-if="settingsStore.settings.tabbar.enable" />
+    <Toolbar v-if="enableToolbar" />
+  </div>
+</template>
+
 <script setup lang="ts">
 import Tabbar from './Tabbar/index.vue'
 import Toolbar from './Toolbar/index.vue'
@@ -37,21 +52,6 @@ watch(scrollTop, (val, oldVal) => {
   scrollOnHide.value = settingsStore.settings.topbar.mode === 'sticky' && val > oldVal && val > topbarHeight.value
 })
 </script>
-
-<template>
-  <div
-    class="topbar-container" :class="{
-      'has-tabbar': settingsStore.settings.tabbar.enable,
-      'has-toolbar': enableToolbar,
-      [`topbar-${settingsStore.settings.topbar.mode}`]: true,
-      'shadow': scrollTop,
-      'hide': scrollOnHide,
-    }" data-fixed-calc-width
-  >
-    <Tabbar v-if="settingsStore.settings.tabbar.enable" />
-    <Toolbar v-if="enableToolbar" />
-  </div>
-</template>
 
 <style lang="scss" scoped>
 .topbar-container {

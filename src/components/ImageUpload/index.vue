@@ -1,3 +1,51 @@
+<template>
+  <div class="upload-container">
+    <ElUpload
+      :show-file-list="false"
+      :headers="headers"
+      :action="action"
+      :data="data"
+      :name="name"
+      :before-upload="beforeUpload"
+      :on-progress="onProgress"
+      :on-success="onSuccess"
+      drag
+      class="image-upload"
+    >
+      <ElImage v-if="url === ''" :src="url === '' ? placeholder : url" :style="`width:${width}px;height:${height}px;`" fit="fill">
+        <template #error>
+          <div class="image-slot" :style="`width:${width}px;height:${height}px;`">
+            <SvgIcon name="i-ep:plus" class="icon" />
+          </div>
+        </template>
+      </ElImage>
+      <div v-else class="image">
+        <ElImage :src="url" :style="`width:${width}px;height:${height}px;`" fit="fill" />
+        <div class="mask">
+          <div class="actions">
+            <span title="预览" @click.stop="preview">
+              <SvgIcon name="i-ep:zoom-in" class="icon" />
+            </span>
+            <span title="移除" @click.stop="remove">
+              <SvgIcon name="i-ep:delete" class="icon" />
+            </span>
+          </div>
+        </div>
+      </div>
+      <div v-show="url === '' && uploadData.progress.percent" class="progress" :style="`width:${width}px;height:${height}px;`">
+        <ElImage :src="uploadData.progress.preview" :style="`width:${width}px;height:${height}px;`" fit="fill" />
+        <ElProgress type="circle" :width="Math.min(width, height) * 0.8" :percentage="uploadData.progress.percent" />
+      </div>
+    </ElUpload>
+    <div v-if="!notip" class="el-upload__tip">
+      <div style="display: inline-block;">
+        <ElAlert :title="`上传图片支持 ${ext.join(' / ')} 格式，且图片大小不超过 ${size}MB，建议图片尺寸为 ${width}*${height}`" type="info" show-icon :closable="false" />
+      </div>
+    </div>
+    <ElImageViewer v-if="uploadData.imageViewerVisible" :url-list="[url]" teleported @close="previewClose" />
+  </div>
+</template>
+
 <script setup lang="ts">
 import type { UploadProps } from 'element-plus'
 import { ElMessage } from 'element-plus'
@@ -85,54 +133,6 @@ const onSuccess: UploadProps['onSuccess'] = (res) => {
   emits('onSuccess', res)
 }
 </script>
-
-<template>
-  <div class="upload-container">
-    <ElUpload
-      :show-file-list="false"
-      :headers="headers"
-      :action="action"
-      :data="data"
-      :name="name"
-      :before-upload="beforeUpload"
-      :on-progress="onProgress"
-      :on-success="onSuccess"
-      drag
-      class="image-upload"
-    >
-      <ElImage v-if="url === ''" :src="url === '' ? placeholder : url" :style="`width:${width}px;height:${height}px;`" fit="fill">
-        <template #error>
-          <div class="image-slot" :style="`width:${width}px;height:${height}px;`">
-            <SvgIcon name="i-ep:plus" class="icon" />
-          </div>
-        </template>
-      </ElImage>
-      <div v-else class="image">
-        <ElImage :src="url" :style="`width:${width}px;height:${height}px;`" fit="fill" />
-        <div class="mask">
-          <div class="actions">
-            <span title="预览" @click.stop="preview">
-              <SvgIcon name="i-ep:zoom-in" class="icon" />
-            </span>
-            <span title="移除" @click.stop="remove">
-              <SvgIcon name="i-ep:delete" class="icon" />
-            </span>
-          </div>
-        </div>
-      </div>
-      <div v-show="url === '' && uploadData.progress.percent" class="progress" :style="`width:${width}px;height:${height}px;`">
-        <ElImage :src="uploadData.progress.preview" :style="`width:${width}px;height:${height}px;`" fit="fill" />
-        <ElProgress type="circle" :width="Math.min(width, height) * 0.8" :percentage="uploadData.progress.percent" />
-      </div>
-    </ElUpload>
-    <div v-if="!notip" class="el-upload__tip">
-      <div style="display: inline-block;">
-        <ElAlert :title="`上传图片支持 ${ext.join(' / ')} 格式，且图片大小不超过 ${size}MB，建议图片尺寸为 ${width}*${height}`" type="info" show-icon :closable="false" />
-      </div>
-    </div>
-    <ElImageViewer v-if="uploadData.imageViewerVisible" :url-list="[url]" teleported @close="previewClose" />
-  </div>
-</template>
 
 <style lang="scss" scoped>
 .upload-container {

@@ -1,3 +1,32 @@
+<template>
+  <ElUpload
+    :headers="headers"
+    :action="action"
+    :data="data"
+    :name="name"
+    :before-upload="beforeUpload"
+    :on-exceed="onExceed"
+    :on-success="onSuccess"
+    :file-list="files"
+    :limit="max"
+    drag
+  >
+    <div class="slot">
+      <SvgIcon name="i-ep:upload-filled" class="el-icon--upload" />
+      <div class="el-upload__text">
+        将文件拖到此处，或<em>点击上传</em>
+      </div>
+    </div>
+    <template #tip>
+      <div v-if="!notip" class="el-upload__tip">
+        <div style="display: inline-block;">
+          <ElAlert :title="`上传文件支持 ${ext.join(' / ')} 格式，单个文件大小不超过 ${size}MB，且文件数量不超过 ${max} 个`" type="info" show-icon :closable="false" />
+        </div>
+      </div>
+    </template>
+  </ElUpload>
+</template>
+
 <script setup lang="ts">
 import type { UploadProps, UploadUserFile } from 'element-plus'
 import { ElMessage } from 'element-plus'
@@ -58,35 +87,6 @@ const onSuccess: UploadProps['onSuccess'] = (res, file, fileList) => {
   emits('onSuccess', res, file, fileList)
 }
 </script>
-
-<template>
-  <ElUpload
-    :headers="headers"
-    :action="action"
-    :data="data"
-    :name="name"
-    :before-upload="beforeUpload"
-    :on-exceed="onExceed"
-    :on-success="onSuccess"
-    :file-list="files"
-    :limit="max"
-    drag
-  >
-    <div class="slot">
-      <SvgIcon name="i-ep:upload-filled" class="el-icon--upload" />
-      <div class="el-upload__text">
-        将文件拖到此处，或<em>点击上传</em>
-      </div>
-    </div>
-    <template #tip>
-      <div v-if="!notip" class="el-upload__tip">
-        <div style="display: inline-block;">
-          <ElAlert :title="`上传文件支持 ${ext.join(' / ')} 格式，单个文件大小不超过 ${size}MB，且文件数量不超过 ${max} 个`" type="info" show-icon :closable="false" />
-        </div>
-      </div>
-    </template>
-  </ElUpload>
-</template>
 
 <style lang="scss" scoped>
 :deep(.el-upload.is-drag) {

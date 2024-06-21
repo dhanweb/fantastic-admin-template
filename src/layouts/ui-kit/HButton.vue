@@ -1,3 +1,9 @@
+<template>
+  <button :disabled="disabled" :class="buttonClass">
+    <slot />
+  </button>
+</template>
+
 <script setup lang="ts">
 const props = withDefaults(
   defineProps<{
@@ -20,9 +26,3 @@ const buttonClass = computed(() => [
     : 'shadow-sm text-ui-text bg-ui-primary hover-bg-ui-primary/75 disabled-bg-ui-primary/90 focus-visible-ring-inset focus-visible-ring-2',
 ])
 </script>
-
-<template>
-  <button :disabled="disabled" :class="buttonClass">
-    <slot />
-  </button>
-</template>

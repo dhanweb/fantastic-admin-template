@@ -1,3 +1,41 @@
+<template>
+  <div class="layout">
+    <div id="app-main">
+      <Header />
+      <div class="wrapper">
+        <div class="sidebar-container" :class="{ show: settingsStore.mode === 'mobile' && !settingsStore.settings.menu.subMenuCollapse }">
+          <MainSidebar />
+          <SubSidebar />
+        </div>
+        <div class="sidebar-mask" :class="{ show: settingsStore.mode === 'mobile' && !settingsStore.settings.menu.subMenuCollapse }" @click="settingsStore.toggleSidebarCollapse()" />
+        <div class="main-container">
+          <Topbar />
+          <div class="main">
+            <RouterView v-slot="{ Component, route }">
+              <Transition name="slide-right" mode="out-in" appear>
+                <KeepAlive :include="keepAliveStore.list">
+                  <component :is="Component" v-show="!isLink" :key="route.fullPath" />
+                </KeepAlive>
+              </Transition>
+            </RouterView>
+            <LinkView v-if="isLink" />
+          </div>
+          <Copyright />
+        </div>
+      </div>
+    </div>
+    <Search />
+    <HotkeysIntro />
+    <template v-if="enableAppSetting">
+      <div class="app-setting" @click="eventBus.emit('global-app-setting-toggle')">
+        <SvgIcon name="i-uiw:setting-o" class="icon" />
+      </div>
+      <AppSetting />
+    </template>
+    <BackTop />
+  </div>
+</template>
+
 <script setup lang="ts">
 import hotkeys from 'hotkeys-js'
 import Header from './components/Header/index.vue'
@@ -70,44 +108,6 @@ onUnmounted(() => {
 
 const enableAppSetting = import.meta.env.VITE_APP_SETTING === 'true'
 </script>
-
-<template>
-  <div class="layout">
-    <div id="app-main">
-      <Header />
-      <div class="wrapper">
-        <div class="sidebar-container" :class="{ show: settingsStore.mode === 'mobile' && !settingsStore.settings.menu.subMenuCollapse }">
-          <MainSidebar />
-          <SubSidebar />
-        </div>
-        <div class="sidebar-mask" :class="{ show: settingsStore.mode === 'mobile' && !settingsStore.settings.menu.subMenuCollapse }" @click="settingsStore.toggleSidebarCollapse()" />
-        <div class="main-container">
-          <Topbar />
-          <div class="main">
-            <RouterView v-slot="{ Component, route }">
-              <Transition name="slide-right" mode="out-in" appear>
-                <KeepAlive :include="keepAliveStore.list">
-                  <component :is="Component" v-show="!isLink" :key="route.fullPath" />
-                </KeepAlive>
-              </Transition>
-            </RouterView>
-            <LinkView v-if="isLink" />
-          </div>
-          <Copyright />
-        </div>
-      </div>
-    </div>
-    <Search />
-    <HotkeysIntro />
-    <template v-if="enableAppSetting">
-      <div class="app-setting" @click="eventBus.emit('global-app-setting-toggle')">
-        <SvgIcon name="i-uiw:setting-o" class="icon" />
-      </div>
-      <AppSetting />
-    </template>
-    <BackTop />
-  </div>
-</template>
 
 <style lang="scss" scoped>
 [data-mode="mobile"] {

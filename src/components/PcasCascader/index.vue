@@ -1,3 +1,7 @@
+<template>
+  <ElCascader v-model="myValue" :options="pcasData as any[]" :props="{ value: 'code', label: 'name' }" :disabled="disabled" clearable filterable />
+</template>
+
 <script setup lang="ts">
 // 行政区划数据来源于 https://github.com/modood/Administrative-divisions-of-China
 import pcasRaw from './pcas-code.json'
@@ -137,7 +141,3 @@ function codeToAny(codes: string[], dictionarie: any[] = pcasData.value): any {
   return output
 }
 </script>
-
-<template>
-  <ElCascader v-model="myValue" :options="pcasData as any[]" :props="{ value: 'code', label: 'name' }" :disabled="disabled" clearable filterable />
-</template>

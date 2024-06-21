@@ -1,3 +1,13 @@
+<template>
+  <Breadcrumb v-if="settingsStore.mode === 'pc' && settingsStore.settings.app.routeBaseOn !== 'filesystem'" class="breadcrumb whitespace-nowrap px-2">
+    <TransitionGroup name="breadcrumb">
+      <BreadcrumbItem v-for="(item, index) in breadcrumbList" :key="`${index}_${item.path}_${item.title}`" :to="index < breadcrumbList.length - 1 && item.path !== '' ? pathCompile(item.path) : ''">
+        {{ item.title }}
+      </BreadcrumbItem>
+    </TransitionGroup>
+  </Breadcrumb>
+</template>
+
 <script setup lang="ts">
 import { compile } from 'path-to-regexp'
 import Breadcrumb from '../../../Breadcrumb/index.vue'
@@ -34,16 +44,6 @@ function pathCompile(path: string) {
   return toPath(route.params)
 }
 </script>
-
-<template>
-  <Breadcrumb v-if="settingsStore.mode === 'pc' && settingsStore.settings.app.routeBaseOn !== 'filesystem'" class="breadcrumb whitespace-nowrap px-2">
-    <TransitionGroup name="breadcrumb">
-      <BreadcrumbItem v-for="(item, index) in breadcrumbList" :key="`${index}_${item.path}_${item.title}`" :to="index < breadcrumbList.length - 1 && item.path !== '' ? pathCompile(item.path) : ''">
-        {{ item.title }}
-      </BreadcrumbItem>
-    </TransitionGroup>
-  </Breadcrumb>
-</template>
 
 <style lang="scss" scoped>
 // 面包屑动画

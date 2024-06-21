@@ -9,6 +9,7 @@ const globalSettingsDefault: RecursiveRequired<Settings.all> = {
     enableProgress: true,
     enableDynamicTitle: false,
     routeBaseOn: 'frontend',
+    prefix: '',
   },
   home: {
     enable: true,

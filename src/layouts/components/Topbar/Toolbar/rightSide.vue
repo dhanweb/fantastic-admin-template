@@ -1,29 +1,3 @@
-<script setup lang="ts">
-import NavSearch from './NavSearch/index.vue'
-import Fullscreen from './Fullscreen/index.vue'
-import PageReload from './PageReload/index.vue'
-import ColorScheme from './ColorScheme/index.vue'
-import eventBus from '@/utils/eventBus'
-import useSettingsStore from '@/store/modules/settings'
-import useUserStore from '@/store/modules/user'
-
-defineOptions({
-  name: 'Tools',
-})
-
-const router = useRouter()
-
-const settingsStore = useSettingsStore()
-const userStore = useUserStore()
-
-const avatarError = ref(false)
-watch(() => userStore.avatar, () => {
-  if (avatarError.value) {
-    avatarError.value = false
-  }
-})
-</script>
-
 <template>
   <div class="flex items-center">
     <NavSearch v-if="settingsStore.settings.toolbar.navSearch" />
@@ -53,3 +27,29 @@ watch(() => userStore.avatar, () => {
     </HDropdownMenu>
   </div>
 </template>
+
+<script setup lang="ts">
+import NavSearch from './NavSearch/index.vue'
+import Fullscreen from './Fullscreen/index.vue'
+import PageReload from './PageReload/index.vue'
+import ColorScheme from './ColorScheme/index.vue'
+import eventBus from '@/utils/eventBus'
+import useSettingsStore from '@/store/modules/settings'
+import useUserStore from '@/store/modules/user'
+
+defineOptions({
+  name: 'Tools',
+})
+
+const router = useRouter()
+
+const settingsStore = useSettingsStore()
+const userStore = useUserStore()
+
+const avatarError = ref(false)
+watch(() => userStore.avatar, () => {
+  if (avatarError.value) {
+    avatarError.value = false
+  }
+})
+</script>

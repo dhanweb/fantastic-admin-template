@@ -1,3 +1,38 @@
+<template>
+  <div
+    class="sub-sidebar-container" :class="{
+      'is-collapse': settingsStore.mode === 'pc' && settingsStore.settings.menu.subMenuCollapse,
+    }"
+  >
+    <Logo
+      :show-logo="settingsStore.settings.menu.menuMode === 'single'" class="sidebar-logo" :class="{
+        'sidebar-logo-bg': settingsStore.settings.menu.menuMode === 'single',
+      }"
+    />
+    <div
+      ref="subSidebarRef" class="sub-sidebar flex-1 transition-shadow-300" :class="{
+        'shadow-top': showShadowTop,
+        'shadow-bottom': showShadowBottom,
+      }" @scroll="onSidebarScroll"
+    >
+      <div ref="menuRef">
+        <TransitionGroup name="sub-sidebar">
+          <template v-for="(mainItem, mainIndex) in menuStore.allMenus" :key="mainIndex">
+            <div v-show="mainIndex === menuStore.actived">
+              <Menu :menu="mainItem.children" :value="route.meta.activeMenu || route.path" :default-openeds="menuStore.defaultOpenedPaths" :accordion="settingsStore.settings.menu.subMenuUniqueOpened" :collapse="settingsStore.mode === 'pc' && settingsStore.settings.menu.subMenuCollapse" class="menu" />
+            </div>
+          </template>
+        </TransitionGroup>
+      </div>
+    </div>
+    <div v-if="settingsStore.mode === 'pc'" class="relative flex items-center px-4 py-3" :class="[settingsStore.settings.menu.subMenuCollapse ? 'justify-center' : 'justify-end']">
+      <span v-show="settingsStore.settings.menu.enableSubMenuCollapseButton" class="flex-center cursor-pointer rounded bg-stone-1 p-2 transition dark-bg-stone-9 hover-bg-stone-2 dark-hover-bg-stone-8" :class="{ '-rotate-z-180': settingsStore.settings.menu.subMenuCollapse }" @click="settingsStore.toggleSidebarCollapse()">
+        <SvgIcon name="toolbar-collapse" />
+      </span>
+    </div>
+  </div>
+</template>
+
 <script setup lang="ts">
 import { useElementSize } from '@vueuse/core'
 import Logo from '../Logo/index.vue'
@@ -39,41 +74,6 @@ onMounted(() => {
   })
 })
 </script>
-
-<template>
-  <div
-    class="sub-sidebar-container" :class="{
-      'is-collapse': settingsStore.mode === 'pc' && settingsStore.settings.menu.subMenuCollapse,
-    }"
-  >
-    <Logo
-      :show-logo="settingsStore.settings.menu.menuMode === 'single'" class="sidebar-logo" :class="{
-        'sidebar-logo-bg': settingsStore.settings.menu.menuMode === 'single',
-      }"
-    />
-    <div
-      ref="subSidebarRef" class="sub-sidebar flex-1 transition-shadow-300" :class="{
-        'shadow-top': showShadowTop,
-        'shadow-bottom': showShadowBottom,
-      }" @scroll="onSidebarScroll"
-    >
-      <div ref="menuRef">
-        <TransitionGroup name="sub-sidebar">
-          <template v-for="(mainItem, mainIndex) in menuStore.allMenus" :key="mainIndex">
-            <div v-show="mainIndex === menuStore.actived">
-              <Menu :menu="mainItem.children" :value="route.meta.activeMenu || route.path" :default-openeds="menuStore.defaultOpenedPaths" :accordion="settingsStore.settings.menu.subMenuUniqueOpened" :collapse="settingsStore.mode === 'pc' && settingsStore.settings.menu.subMenuCollapse" class="menu" />
-            </div>
-          </template>
-        </TransitionGroup>
-      </div>
-    </div>
-    <div v-if="settingsStore.mode === 'pc'" class="relative flex items-center px-4 py-3" :class="[settingsStore.settings.menu.subMenuCollapse ? 'justify-center' : 'justify-end']">
-      <span v-show="settingsStore.settings.menu.enableSubMenuCollapseButton" class="flex-center cursor-pointer rounded bg-stone-1 p-2 transition dark-bg-stone-9 hover-bg-stone-2 dark-hover-bg-stone-8" :class="{ '-rotate-z-180': settingsStore.settings.menu.subMenuCollapse }" @click="settingsStore.toggleSidebarCollapse()">
-        <SvgIcon name="toolbar-collapse" />
-      </span>
-    </div>
-  </div>
-</template>
 
 <style lang="scss" scoped>
 .sub-sidebar-container {

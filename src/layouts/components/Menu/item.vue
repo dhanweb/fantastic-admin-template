@@ -1,42 +1,3 @@
-<script setup lang="ts">
-import type { SubMenuItemProps } from './types'
-import { rootMenuInjectionKey } from './types'
-
-const props = withDefaults(
-  defineProps<SubMenuItemProps>(),
-  {
-    level: 0,
-    subMenu: false,
-    expand: false,
-  },
-)
-
-const rootMenu = inject(rootMenuInjectionKey)!
-
-const itemRef = ref<HTMLElement>()
-
-const isActived = computed(() => {
-  return props.subMenu
-    ? rootMenu.subMenus[props.uniqueKey.at(-1)!].active
-    : rootMenu.activeIndex === props.uniqueKey.at(-1)!
-})
-
-const isItemActive = computed(() => {
-  return isActived.value && (!props.subMenu || rootMenu.isMenuPopup)
-})
-
-// 缩进样式
-const indentStyle = computed(() => {
-  return !rootMenu.isMenuPopup
-    ? `padding-left: ${20 * (props.level ?? 0)}px`
-    : ''
-})
-
-defineExpose({
-  ref: itemRef,
-})
-</script>
-
 <template>
   <div
     ref="itemRef" class="menu-item relative transition-all" :class="{
@@ -91,3 +52,42 @@ defineExpose({
     </router-link>
   </div>
 </template>
+
+<script setup lang="ts">
+import type { SubMenuItemProps } from './types'
+import { rootMenuInjectionKey } from './types'
+
+const props = withDefaults(
+  defineProps<SubMenuItemProps>(),
+  {
+    level: 0,
+    subMenu: false,
+    expand: false,
+  },
+)
+
+const rootMenu = inject(rootMenuInjectionKey)!
+
+const itemRef = ref<HTMLElement>()
+
+const isActived = computed(() => {
+  return props.subMenu
+    ? rootMenu.subMenus[props.uniqueKey.at(-1)!].active
+    : rootMenu.activeIndex === props.uniqueKey.at(-1)!
+})
+
+const isItemActive = computed(() => {
+  return isActived.value && (!props.subMenu || rootMenu.isMenuPopup)
+})
+
+// 缩进样式
+const indentStyle = computed(() => {
+  return !rootMenu.isMenuPopup
+    ? `padding-left: ${20 * (props.level ?? 0)}px`
+    : ''
+})
+
+defineExpose({
+  ref: itemRef,
+})
+</script>

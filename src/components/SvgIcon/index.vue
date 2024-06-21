@@ -1,3 +1,13 @@
+<template>
+  <i class="relative h-[1em] w-[1em] flex-inline items-center justify-center fill-current leading-[1em]" :class="{ [name]: outputType === 'unocss' }" :style="style">
+    <Icon v-if="outputType === 'iconify'" :icon="name" />
+    <svg v-else-if="outputType === 'svg'" class="h-[1em] w-[1em]" aria-hidden="true">
+      <use :xlink:href="`#icon-${name}`" />
+    </svg>
+    <img v-else-if="outputType === 'img'" :src="name" class="h-[1em] w-[1em]">
+  </i>
+</template>
+
 <script setup lang="ts">
 import { Icon } from '@iconify/vue'
 
@@ -54,13 +64,3 @@ const style = computed(() => {
   }
 })
 </script>
-
-<template>
-  <i class="relative h-[1em] w-[1em] flex-inline items-center justify-center fill-current leading-[1em]" :class="{ [name]: outputType === 'unocss' }" :style="style">
-    <Icon v-if="outputType === 'iconify'" :icon="name" />
-    <svg v-else-if="outputType === 'svg'" class="h-[1em] w-[1em]" aria-hidden="true">
-      <use :xlink:href="`#icon-${name}`" />
-    </svg>
-    <img v-else-if="outputType === 'img'" :src="name" class="h-[1em] w-[1em]">
-  </i>
-</template>
