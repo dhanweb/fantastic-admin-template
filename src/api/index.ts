@@ -5,6 +5,7 @@ import Message from 'vue-m-message'
 import { ElMessage } from 'element-plus'
 import useUserStore from '@/store/modules/user'
 import { Storage } from '@/utils/storage'
+import { extractFilename } from '@/utils/file.ts'
 
 Storage.clear()
 const api = axios.create({
@@ -40,6 +41,12 @@ api.interceptors.response.use(
       return Promise.resolve(response.data)
     }
     else {
+      if (response.config.responseType === 'blob' && response.data?.type !== 'application/json') {
+        return Promise.resolve({
+          file: response.data,
+          filename: extractFilename(response.headers['content-disposition']),
+        })
+      }
       if (code === 401) {
         useUserStore().logout()
       }
