@@ -1,8 +1,10 @@
+import { defineStore } from 'pinia'
 import useSettingsStore from './settings'
 import useRouteStore from './route'
 import useMenuStore from './menu'
 import router from '@/router'
 import apiUser from '@/api/modules/user'
+import { avatarStorage, tokenStorage, usernameStorage } from '@/utils/storage'
 
 const useUserStore = defineStore(
   // 唯一ID
@@ -12,9 +14,9 @@ const useUserStore = defineStore(
     const routeStore = useRouteStore()
     const menuStore = useMenuStore()
 
-    const account = ref(localStorage.account ?? '')
-    const token = ref(localStorage.token ?? '')
-    const avatar = ref(localStorage.avatar ?? '')
+    const account = ref(usernameStorage.getItem() ?? '')
+    const token = ref(tokenStorage.getItem() ?? '')
+    const avatar = ref(avatarStorage.getItem() ?? '')
     const permissions = ref<string[]>([])
     const isLogin = computed(() => {
       if (token.value) {
@@ -29,18 +31,19 @@ const useUserStore = defineStore(
       password: string
     }) {
       const res = await apiUser.login(data)
-      localStorage.setItem('account', res.data.account)
-      localStorage.setItem('token', res.data.token)
-      localStorage.setItem('avatar', res.data.avatar)
+      tokenStorage.setItem(res.data.token)
+      usernameStorage.setItem(res.data.account)
+      avatarStorage.setItem(res.data.avatar)
       account.value = res.data.account
       token.value = res.data.token
       avatar.value = res.data.avatar
     }
     // 登出
     async function logout(redirect = router.currentRoute.value.fullPath) {
-      localStorage.removeItem('account')
-      localStorage.removeItem('token')
-      localStorage.removeItem('avatar')
+      tokenStorage.removeItem()
+      usernameStorage.removeItem()
+      avatarStorage.removeItem()
+
       account.value = ''
       token.value = ''
       avatar.value = ''

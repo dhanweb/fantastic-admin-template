@@ -260,6 +260,15 @@
       </div>
       <HToggle v-model="settingsStore.settings.app.enableDynamicTitle" />
     </div>
+    <div class="setting-item">
+      <div class="label">
+        Storage存储前缀
+        <HTooltip text="可以设置Storage工具方法存储前缀，为空则没有前缀">
+          <SvgIcon name="i-ri:question-line" />
+        </HTooltip>
+      </div>
+      <HInput v-model="settingsStore.settings.app.prefix" />
+    </div>
     <template v-if="isSupported" #footer>
       <HButton block @click="handleCopy">
         <SvgIcon name="i-ep:document-copy" />
