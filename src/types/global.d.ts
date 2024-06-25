@@ -159,6 +159,11 @@ declare namespace Settings {
      * @默认值 `false`
      */
     colorScheme?: boolean
+    /**
+     * 是否开启通知中心
+     * @默认值 `true`
+     */
+    notification?: boolean
   }
   interface mainPage {
     /**

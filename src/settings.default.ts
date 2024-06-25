@@ -42,6 +42,7 @@ const globalSettingsDefault: RecursiveRequired<Settings.all> = {
     fullscreen: false,
     pageReload: false,
     colorScheme: false,
+    notification: false,
   },
   mainPage: {
     enableHotkeys: true,

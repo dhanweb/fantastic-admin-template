@@ -161,6 +161,15 @@
       </div>
       <HToggle v-model="settingsStore.settings.toolbar.colorScheme" />
     </div>
+    <div class="setting-item">
+      <div class="label">
+        通知中心
+        <HTooltip text="开启可显示通知中心，具体功能暂未开发">
+          <SvgIcon name="i-ri:question-line" />
+        </HTooltip>
+      </div>
+      <HToggle v-model="settingsStore.settings.toolbar.notification" />
+    </div>
     <div class="divider">
       页面
     </div>

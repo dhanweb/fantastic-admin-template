@@ -1,6 +1,7 @@
 <template>
   <div class="flex items-center">
     <NavSearch v-if="settingsStore.settings.toolbar.navSearch" />
+    <Notice v-if="settingsStore.settings.toolbar.notification" />
     <Fullscreen v-if="settingsStore.settings.toolbar.fullscreen" />
     <PageReload v-if="settingsStore.settings.toolbar.pageReload" />
     <ColorScheme v-if="settingsStore.settings.toolbar.colorScheme" />
@@ -36,6 +37,7 @@ import ColorScheme from './ColorScheme/index.vue'
 import eventBus from '@/utils/eventBus'
 import useSettingsStore from '@/store/modules/settings'
 import useUserStore from '@/store/modules/user'
+import Notice from '@/layouts/components/Topbar/Toolbar/Notice/index.vue'
 
 defineOptions({
   name: 'Tools',
