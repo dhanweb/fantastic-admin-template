@@ -18,12 +18,7 @@ const useUserStore = defineStore(
     const token = ref(tokenStorage.getItem() ?? '')
     const avatar = ref(avatarStorage.getItem() ?? '')
     const permissions = ref<string[]>([])
-    const isLogin = computed(() => {
-      if (token.value) {
-        return true
-      }
-      return false
-    })
+    const isLogin = computed(() => !!token.value)
 
     // 登录
     async function login(data: {
