@@ -12,8 +12,8 @@ interface StorageOptions {
  * 表示一个存储实例的类。
  */
 class StorageInstance {
-  private key: string
-  private expires: number | null
+  private readonly key: string
+  private readonly expires: number | null
 
   /**
    * 创建一个 StorageInstance 实例。
@@ -39,6 +39,7 @@ class StorageInstance {
     }
     catch (e) {
       console.error('保存出错:', e)
+      throw new Error(`Failed to save item: ${e}`)
     }
   }
 
@@ -48,6 +49,7 @@ class StorageInstance {
    */
   getItem() {
     const itemStr = localStorage.getItem(this.key)
+
     if (!itemStr) {
       return null
     }
@@ -58,13 +60,12 @@ class StorageInstance {
         this.removeItem()
         return null
       }
-
       return item.value
     }
     catch (e) {
       console.error('读取出错:', e)
       this.removeItem()
-      return null
+      throw new Error(`Failed to read item: ${e}`)
     }
   }
 
@@ -80,8 +81,14 @@ class StorageInstance {
  * 存储工具类，用于创建和管理存储实例。
  */
 export class StorageUtil {
-  private prefix: string
-  private options?: StorageOptions
+  /** 存储前缀 */
+  private readonly prefix: string
+  /** 配置项 */
+  private readonly options?: StorageOptions
+  /** 当前创建的实例数组 */
+  private readonly instances: StorageInstance[] = []
+  /** 所有的实例数组 */
+  static readonly utils: StorageUtil[] = []
 
   /**
    * 创建一个 StorageUtil 实例。
@@ -91,6 +98,7 @@ export class StorageUtil {
   constructor(prefix: string = '', options?: StorageOptions) {
     this.prefix = prefix
     this.options = options
+    StorageUtil.utils.push(this)
   }
 
   /**
@@ -111,20 +119,28 @@ export class StorageUtil {
    */
   createInstance(key: string, options?: StorageOptions): StorageInstance {
     const prefixedKey = this.prefix ? `${this.prefix}${key}` : key
-    return new StorageInstance(prefixedKey, options ?? this.options)
+    const instance = new StorageInstance(prefixedKey, options ?? this.options)
+    this.instances.push(instance)
+    return instance
   }
 
   /**
-   * 清除所有带有指定前缀的存储项。
+   * 清除当前实例创建的所有存储项。
    */
   clear() {
-    const keysToRemove: string[] = []
-    for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i)
-      if (key && (this.prefix === '' || key.startsWith(this.prefix))) {
-        keysToRemove.push(key)
-      }
-    }
-    keysToRemove.forEach(key => localStorage.removeItem(key))
+    this.instances.forEach((instance) => {
+      instance.removeItem()
+    })
+  }
+
+  /**
+   * 清除所有 StorageUtil 实例的存储项。
+   */
+  static clearAll() {
+    StorageUtil.utils.forEach((storage) => {
+      storage.instances.forEach((instance) => {
+        instance.removeItem()
+      })
+    })
   }
 }
