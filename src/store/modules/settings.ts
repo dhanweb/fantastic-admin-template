@@ -34,8 +34,13 @@ const useSettingsStore = defineStore(
         case 'light':
           document.documentElement.classList.remove('dark')
           break
+
         case 'dark':
           document.documentElement.classList.add('dark')
+          break
+
+        case 'classic':
+          document.documentElement.classList.add('classic')
           break
       }
     }

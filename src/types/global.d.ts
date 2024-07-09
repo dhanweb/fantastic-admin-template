@@ -7,6 +7,8 @@ type RecursivePartial<T> = {
   [P in keyof T]?: RecursivePartial<T[P]>
 }
 
+type ComponentRef = abstract new (...args: any) => any
+
 declare namespace Settings {
   interface app {
     /**
@@ -15,7 +17,7 @@ declare namespace Settings {
      * @可选值 `'light'` 明亮模式
      * @可选值 `'dark'` 暗黑模式
      */
-    colorScheme?: '' | 'light' | 'dark'
+    colorScheme?: '' | 'light' | 'dark' | 'classic'
     /**
      * 是否开启权限功能
      * @默认值 `false`

@@ -81,3 +81,44 @@ export const darkTheme = {
   '--g-tabbar-tab-hover-color': '#e5e5e5',
   '--g-tabbar-tab-active-color': '#e5e5e5',
 }
+
+export const classicTheme = {
+  'color-scheme': 'classic',
+  // 内置 UI
+  '--ui-primary': '64 158 255;',
+  '--ui-text': hex2rgba('#fcfcfc')!.join(' '),
+  // 主体
+  '--g-bg': '#f2f2f2',
+  '--g-container-bg': '#fff',
+  '--g-border-color': '#f2f2f2',
+  // 头部
+  '--g-header-bg': '#222b45',
+  '--g-header-color': '#fff',
+  '--g-header-menu-color': '#fff',
+  '--g-header-menu-hover-bg': '#334067',
+  '--g-header-menu-hover-color': '#fff',
+  '--g-header-menu-active-bg': '#334067',
+  '--g-header-menu-active-color': '#fff',
+  // 主导航
+  '--g-main-sidebar-bg': '#222b45',
+  '--g-main-sidebar-menu-color': '#fff',
+  '--g-main-sidebar-menu-hover-bg': '#334067',
+  '--g-main-sidebar-menu-hover-color': '#fff',
+  '--g-main-sidebar-menu-active-bg': '#334067',
+  '--g-main-sidebar-menu-active-color': '#fff',
+  // 次导航
+  '--g-sub-sidebar-bg': '#fff',
+  '--g-sub-sidebar-logo-bg': '#fff',
+  '--g-sub-sidebar-logo-color': '#fff',
+  '--g-sub-sidebar-menu-color': '#515A6E',
+  '--g-sub-sidebar-menu-hover-bg': '#dde1e3',
+  '--g-sub-sidebar-menu-hover-color': '#0f0f0f',
+  '--g-sub-sidebar-menu-active-bg': '#e8f4ff',
+  '--g-sub-sidebar-menu-active-color': '#1890ff',
+  // 标签栏
+  '--g-tabbar-dividers-bg': '#a3a3a3',
+  '--g-tabbar-tab-color': '#a3a3a3',
+  '--g-tabbar-tab-hover-bg': '#e5e5e5',
+  '--g-tabbar-tab-hover-color': '#0f0f0f',
+  '--g-tabbar-tab-active-color': '#0f0f0f',
+}
